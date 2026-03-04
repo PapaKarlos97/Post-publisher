@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-@Service
+@Service("secondCommentService")
 public class SecondCommentServiceImpl implements CommentService {
 
     private final List<String>comments=new ArrayList<>();
