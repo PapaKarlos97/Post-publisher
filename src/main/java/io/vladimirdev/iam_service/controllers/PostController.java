@@ -2,9 +2,13 @@ package io.vladimirdev.iam_service.controllers;
 
 import io.vladimirdev.iam_service.model.constants.ApiErrorMessage;
 import io.vladimirdev.iam_service.model.constants.ApiLogMessage;
+import io.vladimirdev.iam_service.model.dto.post.PostDTO;
 import io.vladimirdev.iam_service.model.entities.Post;
+import io.vladimirdev.iam_service.model.response.IamResponse;
 import io.vladimirdev.iam_service.repositories.PostRepository;
+import io.vladimirdev.iam_service.services.PostService;
 import io.vladimirdev.iam_service.services.impl.PostServiceImpl;
+import io.vladimirdev.iam_service.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +23,13 @@ import java.util.Map;
 @RequestMapping("${end.point.posts}")
 @RequiredArgsConstructor
 public class PostController {
-    private final PostRepository postRepo;
+    private final PostServiceImpl postService;
 
     @GetMapping("${end.point.id}")
-    public ResponseEntity<Post>getPostById(@PathVariable(name = "id") long postId){
-        log.info(ApiLogMessage.POST_INFO_BY_ID.getMessage(postId));
-        return postRepo.findById(postId)
-                .map(ResponseEntity::ok)
-                .orElseGet(()->{
-                    log.info(ApiErrorMessage.POST_NOT_FOUND_BY_ID.getMessage(postId));
-                    return ResponseEntity.notFound().build();
-                });
-    }
+    public ResponseEntity<IamResponse<PostDTO>>getPostById(@PathVariable(name = "id") long postId){
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+        return ResponseEntity.ok(postService.getById(postId));
 
+    }
 
 }
